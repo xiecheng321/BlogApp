@@ -1,4 +1,4 @@
-﻿@model BlogApp.Models.BlogPost
+﻿@model BlogApp.Models.Chapter
 
 <h2>发布新文章</h2>
 
@@ -6,6 +6,11 @@
     <div>
         <label>标题：</label><br />
         <input asp-for="Title" class="form-control" />
+    </div>
+    <div>
+        <label>作者：</label><br />
+        @*<label asp-for="Author"></label>*@
+        <input asp-for="Author" class="form-control"/>
     </div>
     <div style="margin-top: 10px;">
         <label>内容：</label><br />

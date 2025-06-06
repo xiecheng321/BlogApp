@@ -9,14 +9,8 @@ namespace BlogApp.Controllers
 {
     public class BlogController : Controller
     {
-        // 模拟内存数据
-        /*private static List<BlogPost> posts = new List<BlogPost>
-        {
-            new BlogPost { Id = 1, Title = "第一篇文章", Content = "欢迎来到我的博客", CreatedAt = DateTime.Now },
-            new BlogPost { Id = 2, Title = "第二篇文章", Content = "这是第二篇文章的内容", CreatedAt = DateTime.Now }
-        };*/
-
-        private static readonly string DataFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "blogposts.json");
+        
+        private static readonly string DataFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Chapters.json");
 
         public IActionResult Index()
         {
@@ -32,7 +26,7 @@ namespace BlogApp.Controllers
 
         // POST: 提交文章数据
         [HttpPost]
-        public IActionResult Create(BlogPost newPost)
+        public IActionResult Create(Chapter newPost)
         {
             var posts = LoadPosts();
             newPost.Id = posts.Count + 1;
@@ -42,17 +36,17 @@ namespace BlogApp.Controllers
             return RedirectToAction("Index");
         }
 
-        private static List<BlogPost> LoadPosts()
+        private static List<Chapter> LoadPosts()
         {
             if (System.IO.File.Exists(DataFile))
             {
                 var json = System.IO.File.ReadAllText(DataFile);
-                return JsonSerializer.Deserialize<List<BlogPost>>(json) ?? new List<BlogPost>();
+                return JsonSerializer.Deserialize<List<Chapter>>(json) ?? new List<Chapter>();
             }
-            return new List<BlogPost>();
+            return new List<Chapter>();
         }
 
-        private static void SavePosts(List<BlogPost> posts)
+        private static void SavePosts(List<Chapter> posts)
         {
             var json = JsonSerializer.Serialize(posts);
             System.IO.File.WriteAllText(DataFile, json);
@@ -83,7 +77,7 @@ namespace BlogApp.Controllers
 
         // POST: 提交编辑后的数据
         [HttpPost]
-        public IActionResult Edit(BlogPost editedPost)
+        public IActionResult Edit(Chapter editedPost)
         {
             var posts = LoadPosts();
             var post = posts.Find(p => p.Id == editedPost.Id);

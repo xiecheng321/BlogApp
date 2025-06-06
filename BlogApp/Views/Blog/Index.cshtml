@@ -1,7 +1,7 @@
 ﻿<a href="/Blog/Create" class="btn btn-success" style="margin-bottom:20px;">➕ 发布新文章</a>
 
 
-@model List<BlogApp.Models.BlogPost>
+@model List<BlogApp.Models.Chapter>
 
 <h2>先秦诗网站</h2>
 
@@ -10,6 +10,7 @@
     <div class="article-card">
         <h3>@post.Title</h3>
         <p>@post.Content</p>
+        <p><small>作者：@post.Author</small></p>
         <p><small>创建时间：@post.CreatedAt</small></p>
 
         <a href="@Url.Action("Edit", "Blog", new { id = post.Id })"

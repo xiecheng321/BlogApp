@@ -1,4 +1,4 @@
-﻿@model BlogApp.Models.BlogPost
+﻿@model BlogApp.Models.Chapter
 
 <h2>编辑文章</h2>
 
@@ -8,10 +8,15 @@
         <label>标题：</label><br />
         <input asp-for="Title" class="form-control" />
     </div>
+	<div>
+		<label>作者：</label><br />
+		<input asp-for="Author" class="form-control" />
+	</div>
     <div style="margin-top: 10px;">
         <label>内容：</label><br />
         <textarea asp-for="Content" rows="5" class="form-control"></textarea>
     </div>
+    
     <div style="margin-top: 10px;">
         <button type="submit" class="btn btn-primary">保存修改</button>
     </div>
