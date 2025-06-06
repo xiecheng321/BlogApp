@@ -1,0 +1,16 @@
+﻿@model BlogApp.Models.Chapter
+
+<h2>添加新章节</h2>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="NovelId" />
+    <div>
+        <label asp-for="Title">章节标题：</label>
+        <input asp-for="Title" />
+    </div>
+    <div>
+        <label asp-for="Content">内容：</label>
+        <textarea asp-for="Content" rows="5" cols="50"></textarea>
+    </div>
+    <button type="submit">保存</button>
+</form>

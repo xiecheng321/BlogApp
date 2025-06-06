@@ -8,6 +8,8 @@ namespace BlogApp
 
             // Add services to the container.注册控制器和视图服务
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
+
 
             var app = builder.Build();
 
@@ -25,6 +27,9 @@ namespace BlogApp
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapRazorPages();
+
 
             // 配置默认路由
             app.MapControllerRoute(

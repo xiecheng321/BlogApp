@@ -1,0 +1,25 @@
+﻿@model BlogApp.Models.Novel
+
+<h2>@Model.Title</h2>
+<p>@Model.Description</p>
+
+<a asp-controller="Chapter" asp-action="Create" asp-route-novelId="@Model.Id">
+    ➕ 添加新章节
+</a>
+
+<hr />
+
+<h3>章节列表：</h3>
+@if (Model.Chapters != null && Model.Chapters.Any())
+{
+    <ul>
+        @foreach (var chapter in Model.Chapters)
+        {
+            <li>@chapter.Title</li>
+        }
+    </ul>
+}
+else
+{
+    <p>暂无章节</p>
+}

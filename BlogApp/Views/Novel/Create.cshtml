@@ -1,0 +1,17 @@
+﻿@model BlogApp.Models.Novel
+
+<h2>添加新小说</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label asp-for="Title">书名：</label><br />
+        <input asp-for="Title" />
+    </div>
+
+    <div>
+        <label asp-for="Description">简介：</label><br />
+        <textarea asp-for="Description" rows="4" cols="50"></textarea>
+    </div>
+
+    <button type="submit">提交</button>
+</form>
