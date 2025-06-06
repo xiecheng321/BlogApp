@@ -50,5 +50,18 @@ namespace BlogApp.Controllers
             // 保存后跳回小说详情页
             return RedirectToAction("Details", "Novel", new { id = chapter.NovelId });
         }
+
+        // 展示章节内容
+        public IActionResult Details(int id)
+        {
+            var chapters = LoadChapters();
+            var chapter = chapters.FirstOrDefault(c => c.Id == id);
+            if (chapter == null)
+            {
+                return NotFound();
+            }
+            return View(chapter);
+        }
+
     }
 }

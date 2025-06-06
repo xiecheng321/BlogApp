@@ -15,7 +15,9 @@
     <ul>
         @foreach (var chapter in Model.Chapters)
         {
-            <li>@chapter.Title</li>
+            <li>
+                <a href="/Chapter/Details/@chapter.Id">@chapter.Title</a>
+            </li>
         }
     </ul>
 }
