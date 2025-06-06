@@ -1,0 +1,23 @@
+﻿<a href="/Blog/Create" class="btn btn-success" style="margin-bottom:20px;">➕ 发布新文章</a>
+
+
+@model List<BlogApp.Models.BlogPost>
+
+<h2>先秦诗网站</h2>
+
+@foreach (var post in Model)
+{
+    <div class="article-card">
+        <h3>@post.Title</h3>
+        <p>@post.Content</p>
+        <p><small>创建时间：@post.CreatedAt</small></p>
+
+        <a href="@Url.Action("Edit", "Blog", new { id = post.Id })"
+           class="btn btn-warning btn-sm" style="margin-right:5px;">编辑</a>
+
+
+        <a href="@Url.Action("Delete", "Blog", new { id = post.Id })"
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('确定要删除这篇文章吗？');">删除</a>
+    </div>
+}
