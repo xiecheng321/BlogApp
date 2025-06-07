@@ -83,5 +83,18 @@ namespace BlogApp.Controllers
             var json = System.IO.File.ReadAllText(chapterFile);
             return JsonSerializer.Deserialize<List<Chapter>>(json) ?? new List<Chapter>();
         }
+
+        public IActionResult Read(int id) 
+        {
+            var novels = LoadNovels();
+            var novel = novels.FirstOrDefault(n => n.Id == id);
+            if (novel == null) return NotFound();
+
+            //加载章节
+            var chapters = LoadChapters();
+            novel.Chapters = chapters.Where(c => c.NovelId == id).ToList();
+
+            return View(novel); //对应 Views/Novel/Read.cshtml
+        }
     }
 }
