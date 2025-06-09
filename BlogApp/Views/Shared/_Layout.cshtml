@@ -7,29 +7,78 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BlogApp.styles.css" asp-append-version="true" />
+
+    <style>
+        
+    </style>
+
+
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlogApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <div style="display: flex; align-items: center; justify-content: space-between; height: 68px; border-bottom: 1px solid #eee; background: #fff; padding: 0 48px;">
+            <!-- 左侧LOGO与名字 -->
+            <div style="display: flex; align-items: center;">
+                <span style="font-size: 36px; font-weight: bold; color: #e8352f; letter-spacing: 2px;">先秦中文网</span>
+                <span style="margin-left: 12px; color: #888; font-size: 14px;">先秦诗旗下网站</span>
+            </div>
+
+            <!-- 中间搜索框 -->
+            <form method="get" action="/Novel/Search" style="flex:1; display: flex; align-items: center; justify-content: center;">
+                <input type="text" name="keyword" placeholder="搜索小说、作者…" style="width: 340px; height: 36px; border: 1px solid #eee; border-radius: 4px 0 0 4px; padding-left: 18px; font-size: 16px;">
+                <button type="submit" style="width: 48px; height: 36px; background: #c42a22; color: #fff; border: none; border-radius: 0 4px 4px 0; font-size: 20px;">
+                    <span style="vertical-align:middle;">🔍</span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+            </form>
+
+            <!-- 右侧账号区 -->
+            <div>
+                <a href="/Bookshelf" style="display:inline-block; border:1px solid #eee; border-radius:6px; padding:0 24px; height:36px; line-height:36px; background:#fff; color:#333; font-size:16px; text-decoration:none; margin-left:18px;">
+                    <span style="font-size:18px; margin-right:8px;">📚</span> 我的书架
+                </a>
+                <!-- 账号登录/管理可以继续加 -->
+            </div>
+        </div>
+
+        <!-- 二级导航栏 -->
+        <nav style="background:#232328; border-bottom:1px solid #111;">
+            <div style="display:flex; align-items:center; height:46px; max-width:100vw;">
+                <!-- 左侧 分类 -->
+                <a href="/Category"
+                   style="display:flex; align-items:center; color:#fff; text-decoration:none; width:180px; height:46px; background:rgba(255,255,255,0.05); justify-content:center; font-weight:500;">
+                    <span style="font-size:22px; margin-right:10px; opacity:0.8;">&#9776;</span>
+                    分类
+                </a>
+                <!-- 中间栏目 -->
+                <div style="flex:1; display:flex; justify-content:center;">
+                    <a href="/Recommend" style="color:#fff; text-decoration:none; margin:0 36px; font-weight:bold;">推荐</a>
+                    <a href="/Rank" style="color:#fff; text-decoration:none; margin:0 36px;">排行</a>
+                    <a href="/CoCreate" style="color:#fff; text-decoration:none; margin:0 36px;">共创热门</a>
+                    <a href="/Free" style="color:#fff; text-decoration:none; margin:0 36px;">免费</a>
+                    <a href="/Author" style="color:#fff; text-decoration:none; margin:0 36px;">作家专区</a>
+                </div>
+                <!-- 右侧两个新标签 -->
+                <div style="display:flex; align-items:center; min-width:220px; justify-content:flex-end;">
+                    <a href="/Video" style="color:#fff; text-decoration:none; margin:0 22px;">看视频</a>
+                    <a href="/Copyright" style="color:#fff; text-decoration:none; margin:0 22px;">版权合作</a>
                 </div>
             </div>
         </nav>
+
+
+
+
+        
+
+
+
     </header>
+
+    
+    
+    
+    
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

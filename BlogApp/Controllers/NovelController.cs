@@ -84,7 +84,7 @@ namespace BlogApp.Controllers
             return JsonSerializer.Deserialize<List<Chapter>>(json) ?? new List<Chapter>();
         }
 
-        public IActionResult Read(int id) 
+        /*public IActionResult Read(int id) 
         {
             var novels = LoadNovels();
             var novel = novels.FirstOrDefault(n => n.Id == id);
@@ -95,6 +95,6 @@ namespace BlogApp.Controllers
             novel.Chapters = chapters.Where(c => c.NovelId == id).ToList();
 
             return View(novel); //对应 Views/Novel/Read.cshtml
-        }
+        }*/
     }
 }
