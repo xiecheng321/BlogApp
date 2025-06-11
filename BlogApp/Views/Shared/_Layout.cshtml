@@ -9,8 +9,42 @@
     <link rel="stylesheet" href="~/BlogApp.styles.css" asp-append-version="true" />
 
     <style>
-        
+        .category-nav {
+            position: relative;
+            height: 46px;
+        }
+
+        .category-list-pop {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 46px;
+            width: 220px;
+            background: #fff;
+            border: 1px solid #eee;
+            z-index: 100;
+            box-shadow: 0 2px 8px #eee;
+            padding: 16px 0;
+        }
+
+        .category-nav:hover .category-list-pop {
+            display: block;
+        }
+
+        .category-list-pop li {
+            margin: 10px 0;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+            .category-list-pop li:hover {
+                background: #f4f4f4;
+            }
     </style>
+
 
 
 
@@ -20,8 +54,8 @@
         <div style="display: flex; align-items: center; justify-content: space-between; height: 68px; border-bottom: 1px solid #eee; background: #fff; padding: 0 48px;">
             <!-- 左侧LOGO与名字 -->
             <div style="display: flex; align-items: center;">
-                <span style="font-size: 36px; font-weight: bold; color: #e8352f; letter-spacing: 2px;">先秦中文网</span>
-                <span style="margin-left: 12px; color: #888; font-size: 14px;">先秦诗旗下网站</span>
+                <span style="font-size: 36px; font-weight: bold; color: #e8352f; letter-spacing: 2px;">##中文网</span>
+                <span style="margin-left: 12px; color: #888; font-size: 14px;">###旗下网站</span>
             </div>
 
             <!-- 中间搜索框 -->
@@ -44,20 +78,61 @@
         <!-- 二级导航栏 -->
         <nav style="background:#232328; border-bottom:1px solid #111;">
             <div style="display:flex; align-items:center; height:46px; max-width:100vw;">
-                <!-- 左侧 分类 -->
-                <a href="/Category"
-                   style="display:flex; align-items:center; color:#fff; text-decoration:none; width:180px; height:46px; background:rgba(255,255,255,0.05); justify-content:center; font-weight:500;">
-                    <span style="font-size:22px; margin-right:10px; opacity:0.8;">&#9776;</span>
-                    分类
-                </a>
+                <div class="category-nav">
+                    <a href="#" style="display:flex; align-items:center; color:#fff; text-decoration:none; width:180px; height:46px; background:rgba(255,255,255,0.05); justify-content:center; font-weight:500;">
+                        <span style="font-size:22px; margin-right:10px; opacity:0.8;">&#9776;</span>
+                        分类
+                    </a>
+                    <div class="category-list-pop">
+                        <ul style="list-style:none; margin:0; padding:0 24px;">
+                            <li>
+                                <a href="/category/xuanhuan" style="color:#222; text-decoration:none; display:flex; align-items:center;">
+                                    <span style="margin-right:10px; font-size:18px;">🗡️</span> 玄幻
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/category/dushi" style="color:#222; text-decoration:none; display:flex; align-items:center;">
+                                    <span style="margin-right:10px; font-size:18px;">🏙️</span> 都市
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/category/kehuan" style="color:#222; text-decoration:none; display:flex; align-items:center;">
+                                    <span style="margin-right:10px; font-size:18px;">🧬</span> 科幻
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/category/xuanyi" style="color:#222; text-decoration:none; display:flex; align-items:center;">
+                                    <span style="margin-right:10px; font-size:18px;">🔍</span> 悬疑
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/category/lishi" style="color:#222; text-decoration:none; display:flex; align-items:center;">
+                                    <span style="margin-right:10px; font-size:18px;">📜</span> 历史
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/category/xianshi" style="color:#222; text-decoration:none; display:flex; align-items:center;">
+                                    <span style="margin-right:10px; font-size:18px;">🏞️</span> 现实
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/category/shiwen" style="color:#222; text-decoration:none; display:flex; align-items:center;">
+                                    <span style="margin-right:10px; font-size:18px;">✒️</span> 诗文
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
                 <!-- 中间栏目 -->
                 <div style="flex:1; display:flex; justify-content:center;">
-                    <a href="/Recommend" style="color:#fff; text-decoration:none; margin:0 36px; font-weight:bold;">推荐</a>
+                    <a href="/" style="color:#fff; text-decoration:none; margin:0 36px; font-weight:bold;">推荐</a>
                     <a href="/Rank" style="color:#fff; text-decoration:none; margin:0 36px;">排行</a>
-                    <a href="/CoCreate" style="color:#fff; text-decoration:none; margin:0 36px;">共创热门</a>
+                    <a href="/CoCreate" style="color:#fff; text-decoration:none; margin:0 36px;">热门共创</a>
                     <a href="/Free" style="color:#fff; text-decoration:none; margin:0 36px;">免费</a>
-                    <a href="/Author" style="color:#fff; text-decoration:none; margin:0 36px;">作家专区</a>
+                    <a href="/Authors" style="color:#fff; text-decoration:none; margin:0 36px;">作家专区</a>
                 </div>
+
                 <!-- 右侧两个新标签 -->
                 <div style="display:flex; align-items:center; min-width:220px; justify-content:flex-end;">
                     <a href="/Video" style="color:#fff; text-decoration:none; margin:0 22px;">看视频</a>

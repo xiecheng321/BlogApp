@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore; // 最上面加
+
+
 namespace BlogApp
 {
     public class Program
@@ -5,6 +8,11 @@ namespace BlogApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // 注册数据库上下文
+            builder.Services.AddDbContext<NovelDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+            );
 
             // Add services to the container.注册控制器和视图服务
             builder.Services.AddControllersWithViews();

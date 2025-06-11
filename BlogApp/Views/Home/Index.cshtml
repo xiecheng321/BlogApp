@@ -2,92 +2,12 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-@*<div class="text-center">
-    <h1 class="display-4">先秦小说网</h1>
-    <a class="btn btn-primary" href="/Novel/Index">管理书籍</a>
-    <a class="btn btn-success" href="/Novel/Create">新建书籍</a>
-</div>*@
+
 
 
 
 @model List<BlogApp.Models.Novel>
 
-@*
-@{
-    ViewData["Title"] = "推荐书籍";
-}
-
-<h2>推荐书籍</h2>
-<div style="display: flex; flex-wrap: wrap; gap: 20px;">
-    @foreach (var novel in Model)
-    {
-        <div style="width: 200px; border: 1px solid #eee; border-radius: 8px; padding: 10px;">
-            <h3>@novel.Title</h3>
-            <p style="font-size:small;color:gray;">@novel.Description</p>
-            <a href="@Url.Action("Details", "Novel", new { id = novel.Id })">点击阅读</a>
-        </div>
-    }
-</div>*@
-
-@*
-<style>
-    .category-list-bar {
-        display: flex;
-        background: #f8f8fa;
-        border-radius: 10px;
-        margin: 18px 0 20px 0;
-        box-shadow: 0 1px 6px rgba(0,0,0,0.06);
-        width: 420px;
-        padding: 0;
-        /* 若作为侧栏可再适当调整宽度 */
-    }
-
-    .category-list-col {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .category-item {
-        display: flex;
-        align-items: center;
-        font-size: 18px;
-        padding: 12px 18px;
-        background: #fff;
-        border-bottom: 1px solid #f2f2f2;
-    }
-
-    .category-list-col.right .category-item {
-        background: #f6f6fa;
-    }
-
-    .category-item:last-child {
-        border-bottom: none;
-    }
-
-    .category-item .icon {
-        font-size: 18px;
-        margin-right: 9px;
-    }
-</style>
-
-<!-- 只放具体类别！不要标题栏，不要分类按钮 -->
-<div class="category-list-bar">
-    <div class="category-list-col left">
-        <div class="category-item"><span class="icon">🐉</span> 玄幻</div>
-        <div class="category-item"><span class="icon">💗</span> 言情</div>
-        <div class="category-item"><span class="icon">🏙️</span> 都市</div>
-        <div class="category-item"><span class="icon">🕵️‍♂️</span> 悬疑</div>
-        <div class="category-item"><span class="icon">🚀</span> 科幻</div>
-    </div>
-    <div class="category-list-col right">
-        <div class="category-item"><span class="icon">🏠</span> 现实</div>
-        <div class="category-item"><span class="icon">🏺</span> 历史</div>
-        <div class="category-item"><span class="icon">📚</span> 社科</div>
-        <div class="category-item"><span class="icon">📖</span> 学习</div>
-        <div class="category-item"><span class="icon">🔬</span> 科普</div>
-    </div>
-</div>*@
-
-
-
+<partial name="_PersonalRecommendSection" />
+<partial name="_EditorRecommendSection" />
+<partial name="_GodRecommendSection" />
