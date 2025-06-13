@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = "手机号登录/注册";
+}
+
+<style>
+    .login-card {
+        width: 370px;
+        margin: 64px auto 0 auto;
+        padding: 40px 36px 32px 36px;
+        border-radius: 16px;
+        box-shadow: 0 2px 16px 2px #eee;
+        background: #fff;
+    }
+
+    .login-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #222;
+        margin-bottom: 36px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    .login-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 16px;
+        color: #555;
+        font-weight: 500;
+    }
+
+    .login-form input[type="text"] {
+        width: 100%;
+        height: 40px;
+        padding: 0 12px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-bottom: 24px;
+        transition: border-color 0.2s;
+        outline: none;
+        background: #fafbfc;
+    }
+
+        .login-form input[type="text"]:focus {
+            border-color: #e8352f;
+            background: #fff;
+        }
+
+    .login-btns {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .btn-main {
+        background: #e8352f;
+        color: #fff;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        padding: 0 28px;
+        height: 38px;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-weight: bold;
+    }
+
+        .btn-main:active,
+        .btn-main:hover {
+            background: #c42a22;
+        }
+
+    .btn-secondary {
+        background: #fff;
+        color: #e8352f;
+        border: 1px solid #e8352f;
+        border-radius: 6px;
+        font-size: 15px;
+        padding: 0 16px;
+        height: 40px;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        font-weight: 500;
+    }
+
+        .btn-secondary:hover {
+            background: #f6d9d7;
+        }
+
+    .login-tips {
+        color: #c42a22;
+        margin-top: 8px;
+        min-height: 24px;
+        text-align: center;
+    }
+</style>
+
+<div class="login-card">
+    <div class="login-title">手机号登录/注册</div>
+    <form asp-action="LoginRegister" method="post" class="login-form">
+        <label for="phoneNumber">手机号</label>
+        <div class="login-btns">
+            <input type="text" id="phoneNumber" name="phoneNumber"
+                   value="@(ViewData["PhoneNumber"] ?? "")" autocomplete="off" maxlength="16"
+                   style="flex:1; height: 40px; margin-bottom:0;" />
+            <button type="button" class="btn-secondary"
+                    id="getCodeBtn"
+                    style="height: 40px; margin-bottom:0;">
+                获取验证码
+            </button>
+        </div>
+        <label for="verifyCode" style="margin-top:16px;">验证码</label>
+        <input type="text" id="verifyCode" name="verifyCode" maxlength="8" autocomplete="off">
+        <div class="login-btns" style="margin-top:20px;">
+            <button type="submit" class="btn-main" style="width:100%;">登录/注册</button>
+        </div>
+        <div class="login-tips" id="codeTip">@Html.ValidationSummary()</div>
+    </form>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.getElementById('getCodeBtn').onclick = function () {
+            var phone = document.getElementById('phoneNumber').value.trim();
+            if (!phone.match(/^1\d{10}$/)) {
+                alert("请输入正确的手机号！");
+                return;
+            }
+            this.disabled = true;
+            this.innerText = "发送中...";
+            fetch("/Account/SendCode", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "phoneNumber=" + encodeURIComponent(phone)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    // 测试阶段显示验证码
+                    document.getElementById("codeTip").innerText = "本次验证码：" + data.code;
+                    this.innerText = "已发送";
+                } else {
+                    this.innerText = "获取验证码";
+                    alert(data.message || "发送失败");
+                }
+            }).catch(() => {
+                this.innerText = "获取验证码";
+                alert("网络异常，请重试");
+            }).finally(() => {
+                setTimeout(() => {
+                    this.disabled = false;
+                    this.innerText = "获取验证码";
+                }, 5000);
+            });
+        };
+    </script>
+}
+
+

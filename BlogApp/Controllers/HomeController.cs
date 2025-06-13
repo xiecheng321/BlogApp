@@ -1,3 +1,5 @@
+
+
 using Microsoft.AspNetCore.Mvc;
 using BlogApp.Models;
 using System.Collections.Generic;
@@ -10,6 +12,16 @@ namespace BlogApp.Controllers
 {
     public class HomeController : Controller
     {
+        // 网站首页
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
+
+
+        /*
         // 小说数据文件路径
         private static readonly string DataFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "novels.json");
 
@@ -39,6 +51,7 @@ namespace BlogApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        }*/
     }
 }
+

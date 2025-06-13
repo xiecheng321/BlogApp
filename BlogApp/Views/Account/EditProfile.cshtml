@@ -1,0 +1,99 @@
+﻿@model BlogApp.Models.User
+@{
+    ViewData["Title"] = "编辑个人信息";
+}
+
+<style>
+    .edit-btns-flex {
+        display: flex;
+        gap: 16px;
+        margin-top: 32px;
+    }
+
+    .edit-btn {
+        flex: 1;
+        height: 46px;
+        border: none;
+        border-radius: 12px;
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+        box-shadow: 0 2px 12px 0 rgba(80,80,80,0.07);
+        cursor: pointer;
+        outline: none;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .edit-btn-save {
+        background: linear-gradient(90deg, #e8352f 0%, #f0554a 100%);
+        color: #fff;
+    }
+
+        .edit-btn-save:hover {
+            background: linear-gradient(90deg, #c42a22 0%, #e8352f 100%);
+            box-shadow: 0 4px 18px 0 rgba(232,53,47,0.12);
+        }
+
+    .edit-btn-cancel {
+        background: #f6f7fa;
+        color: #333;
+        border: 1px solid #d3d8e0;
+    }
+
+        .edit-btn-cancel:hover {
+            background: #e4e7ed;
+            color: #c42a22;
+            border: 1px solid #c42a22;
+        }
+</style>
+
+<div style="max-width:420px;margin:48px auto;background:#fff;padding:36px 44px;border-radius:12px;box-shadow:0 2px 18px #eee;">
+    <h2 style="text-align:center;margin-bottom:24px;">编辑个人信息</h2>
+    <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+        <div style="margin-bottom:16px;">
+            <label>用户名：</label>
+            <input type="text" name="UserName" value="@Model.UserName" class="form-control" />
+        </div>
+        <div style="margin-bottom:16px;">
+            <label>签名：</label>
+            <input type="text" name="Bio" value="@Model.Bio" class="form-control" />
+        </div>
+        <div style="margin-bottom:16px;">
+            <label>性别：</label>
+            <select name="Gender" class="form-control">
+                @if (Model?.Gender == "女")
+                {
+                    <option value="男">男</option>
+                    <option value="女" selected>女</option>
+                }
+                else
+                {
+                    <option value="男" selected>男</option>
+                    <option value="女">女</option>
+                }
+            </select>
+
+        </div>
+        <div style="margin-bottom:16px;">
+            <label>年龄：</label>
+            <input type="number" name="Age" value="@Model.Age" class="form-control" />
+        </div>
+        <div style="margin-bottom:16px;">
+            <label>头像：</label>
+            <input type="file" name="avatarFile" class="form-control" />
+            @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+            {
+                <img src="@Model.AvatarUrl" width="80" style="margin-top:8px;" />
+            }
+        </div>
+        <div class="edit-btns-flex">
+            <button type="submit" class="edit-btn edit-btn-save">保存</button>
+            <a href="/Account/Profile" class="edit-btn edit-btn-cancel">取消</a>
+        </div>
+
+    </form>
+</div>

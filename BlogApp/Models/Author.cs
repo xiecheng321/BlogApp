@@ -1,11 +1,16 @@
 ﻿using BlogApp.Models;
 
-public class Author
+namespace BlogApp.Models
 {
-    public int Id { get; set; }               // 作者唯一Id
-    public string Name { get; set; }          // 作者名（可重名）
-    public string Bio { get; set; }           // 简介（可选）
-    public string AvatarUrl { get; set; }     // 头像（可选）
-    // 可继续扩展：认证标记、社交账号、联系邮箱等
-    public List<Novel> Novels { get; set; }   // 作者所有作品
+    public class Author
+    {
+        public int Id { get; set; }           // 主键
+        public int UserId { get; set; }       // 外键，指向User
+        public string PenName { get; set; }   // 笔名
+        public string Bio { get; set; }       // 作家简介
+        public DateTime ApplyTime { get; set; }// 申请时间
+        public int Status { get; set; }       // 认证/审核等状态
+                                              // 导航属性
+        public User User { get; set; }        // 导航属性
+    }
 }

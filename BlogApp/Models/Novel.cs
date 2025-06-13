@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿/*
+
+using System.Collections.Generic;
 
 
 namespace BlogApp.Models
@@ -17,3 +19,5 @@ namespace BlogApp.Models
 
 
 }
+
+*/

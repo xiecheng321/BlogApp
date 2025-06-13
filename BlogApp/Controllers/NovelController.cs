@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+
+using Microsoft.AspNetCore.Mvc;
 using BlogApp.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -96,5 +98,8 @@ namespace BlogApp.Controllers
 
             return View(novel); //对应 Views/Novel/Read.cshtml
         }*/
+/*
     }
 }
+
+*/

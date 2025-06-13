@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "申请成为作家";
+}
+
+<div style="max-width:400px;margin:48px auto;background:#fff;padding:36px 36px;border-radius:12px;box-shadow:0 2px 18px #eee;">
+    <h2 style="text-align:center;">申请成为作家</h2>
+    <form method="post">
+        <div style="margin-bottom:18px;">
+            <label>笔名：</label>
+            <input type="text" name="penName" class="form-control" required />
+        </div>
+        <div style="margin-bottom:18px;">
+            <label>简介：</label>
+            <textarea name="intro" class="form-control" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger" style="width:100%;">提交申请</button>
+    </form>
+</div>

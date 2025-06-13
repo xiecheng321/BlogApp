@@ -1,4 +1,6 @@
-﻿using System;
+﻿/*
+
+using System;
 
 namespace BlogApp.Models
 {
@@ -12,3 +14,5 @@ namespace BlogApp.Models
     }
 
 }
+
+*/

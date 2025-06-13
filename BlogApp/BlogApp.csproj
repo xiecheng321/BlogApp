@@ -4,14 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>5d5cc1c8-bc1f-45d9-a470-697d5e58236c</UserSecretsId>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Views\新文件夹\**" />
-    <Content Remove="Views\新文件夹\**" />
-    <EmbeddedResource Remove="Views\新文件夹\**" />
-    <None Remove="Views\新文件夹\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
@@ -31,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="wwwroot\新文件夹\" />
   </ItemGroup>
 
 </Project>

@@ -67,12 +67,33 @@
             </form>
 
             <!-- 右侧账号区 -->
+            @using Microsoft.AspNetCore.Http
+            @{
+                var isLogin = Context.Session.GetInt32("UserId") != null;
+                var phoneNumber = Context.Session.GetString("PhoneNumber");
+                var userName = Context.Session.GetString("UserName");
+                if (string.IsNullOrWhiteSpace(userName))
+                {
+                    userName = phoneNumber;
+                }
+            }
             <div>
-                <a href="/Bookshelf" style="display:inline-block; border:1px solid #eee; border-radius:6px; padding:0 24px; height:36px; line-height:36px; background:#fff; color:#333; font-size:16px; text-decoration:none; margin-left:18px;">
-                    <span style="font-size:18px; margin-right:8px;">📚</span> 我的书架
-                </a>
-                <!-- 账号登录/管理可以继续加 -->
+                <a href="/Bookshelf" ...>📚 我的书架</a>
+                @if (!isLogin)
+                {
+                    <a href="/Account/LoginRegister" ...>登录/注册</a>
+                }
+                else
+                {
+                    <a href="/Account/Profile" style="margin-left:16px; color:#666; text-decoration:none;">
+                        欢迎，@(string.IsNullOrEmpty(userName) ? "已登录" : userName)
+                    </a>
+
+                    <a href="/Account/Logout" style="margin-left:12px; color:#d00;">退出登录</a>
+                }
             </div>
+
+
         </div>
 
         <!-- 二级导航栏 -->
