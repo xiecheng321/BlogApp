@@ -25,29 +25,43 @@ namespace BlogApp.Controllers
         // GET: Novel/Create
         public IActionResult Create()
         {
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                return RedirectToAction("LoginRegister", "Account");
+            }
+
+            var user = _context.Users.Include(u => u.Author).FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                return RedirectToAction("LoginRegister", "Account");
+            }
+            if (user.Author == null)
+            {
+                return RedirectToAction("Apply", "Author");
+            }
+
             var categories = _context.Categories.ToList();
             ViewBag.Categories = categories;
             return View();
         }
 
-
-        // 问题原因：user 未定义。你需要获取当前登录用户，并通过它找到 AuthorId。
-        // 假设你用 ASP.NET Core Identity 或自定义登录，通常可以通过 User.Identity.Name 拿到用户名，再查 User 和 Author。
-        // 示例修正如下：
-
         [HttpPost]
         public IActionResult Create(string Title, int CategoryId, string Description, IFormFile CoverImage)
         {
-            // 获取当前登录用户
-            var userName = User.Identity?.Name;
-            if (string.IsNullOrEmpty(userName))
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
             {
-                return Unauthorized();
+                return RedirectToAction("LoginRegister", "Account");
             }
-            var user = _context.Users.Include(u => u.Author).FirstOrDefault(u => u.UserName == userName);
-            if (user == null || user.Author == null)
+            var user = _context.Users.Include(u => u.Author).FirstOrDefault(u => u.Id == userId);
+            if (user == null)
             {
-                return Forbid(); // 或返回错误提示
+                return RedirectToAction("LoginRegister", "Account");
+            }
+            if (user.Author == null)
+            {
+                return RedirectToAction("Apply", "Author");
             }
 
             var novel = new Novel
