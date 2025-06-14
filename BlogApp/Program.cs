@@ -45,6 +45,34 @@ namespace BlogApp
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+
+            // 分类数据初始化（只会加一次，重复启动不会重复加）
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<BlogApp.Models.AppDbContext>();
+                if (!context.Categories.Any())
+                {
+
+                        //如果 Category 有 Icon 字段，也可以同时赋值：
+                        //new Category { Name = "玄幻", Icon = "???" }
+                    context.Categories.AddRange(
+                        new Category { Name = "玄幻", Icon = "???" },
+                        new Category { Name = "都市", Icon = "???" },
+                        new Category { Name = "科幻", Icon = "??" },
+                        new Category { Name = "悬疑", Icon = "??" },
+                        new Category { Name = "历史", Icon = "??" },
+                        new Category { Name = "现实", Icon = "???" },
+                        new Category { Name = "诗文", Icon = "??" }
+                        // ...可以继续加
+                    );
+                    context.SaveChanges();
+                }
+            }
+
+
+
+
             app.Run();
         }
     }

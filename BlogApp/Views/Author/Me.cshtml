@@ -2,15 +2,35 @@
 @{
     ViewData["Title"] = "作家中心";
 }
-
-<div style="max-width:420px;margin:48px auto;background:#fff;padding:36px 36px;border-radius:12px;box-shadow:0 2px 18px #eee;">
-    <h2 style="text-align:center;">作家中心</h2>
+<div style="max-width:480px;margin:48px auto;background:#fff;padding:36px 36px;border-radius:12px;box-shadow:0 2px 18px #eee;">
+    <h2 style="text-align:center;">作家工作台</h2>
     <div style="margin-bottom:16px;">
         <strong>笔名：</strong> @Model.PenName
     </div>
     <div style="margin-bottom:16px;">
         <strong>简介：</strong> @Model.Bio
     </div>
-    <!-- 你后续可以在这里添加作品管理等入口 -->
-    <a href="/" class="btn btn-secondary" style="width:100%;">返回首页</a>
+    <a href="@Url.Action("Edit", "Author")" class="btn btn-secondary" style="width:100%;">编辑资料</a>
+    <hr />
+    <div style="margin-bottom:16px;">
+        <a href="@Url.Action("Create", "Novel")" class="btn btn-danger" style="width:100%;">新建小说</a>
+    </div>
+    <h4>我的作品</h4>
+    @if (Model.Novels != null && Model.Novels.Any())
+    {
+        <ul>
+            @foreach (var novel in Model.Novels)
+            {
+                <li>
+                    <strong>@novel.Title</strong>
+                    <a href="@Url.Action("Edit", "Novel", new { id = novel.Id })">编辑</a>
+                    <a href="@Url.Action("Chapters", "Novel", new { id = novel.Id })">章节管理</a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div>你还没有发布作品</div>
+    }
 </div>

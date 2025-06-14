@@ -57,8 +57,12 @@ public class AuthorController : Controller
         {
             PenName = penName,
             Bio = intro,
+            UserId = user.Id,           // ★ 关键行
+            ApplyTime = DateTime.Now,
+            Status = 0                  // 有的话加上
             // 可以添加其他字段如：申请时间
         };
+
         _context.Authors.Add(author);
         _context.SaveChanges();
 

@@ -7,9 +7,10 @@ namespace BlogApp.Models
     public class AppDbContext : DbContext
     {
         public DbSet<Author> Authors { get; set; }
-        //public DbSet<Novel> Novels { get; set; }
-        //public DbSet<Chapter> Chapters { get; set; }
+        public DbSet<Novel> Novels { get; set; }
+        public DbSet<Chapter> Chapters { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

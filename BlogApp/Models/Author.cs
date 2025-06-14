@@ -12,5 +12,7 @@ namespace BlogApp.Models
         public int Status { get; set; }       // 认证/审核等状态
                                               // 导航属性
         public User User { get; set; }        // 导航属性
+
+        public List<Novel> Novels { get; set; }  // ★导航属性：一个作者拥有多本小说
     }
 }
