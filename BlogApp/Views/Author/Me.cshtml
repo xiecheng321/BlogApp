@@ -1,36 +1,14 @@
 ﻿@model BlogApp.Models.Author
 @{
-    ViewData["Title"] = "作家中心";
+    ViewBag.Current = "Me";
 }
-<div style="max-width:480px;margin:48px auto;background:#fff;padding:36px 36px;border-radius:12px;box-shadow:0 2px 18px #eee;">
-    <h2 style="text-align:center;">作家工作台</h2>
-    <div style="margin-bottom:16px;">
-        <strong>笔名：</strong> @Model.PenName
+<div style="display: flex; justify-content: center; align-items: flex-start; min-height: 500px; margin-top: 60px;">
+    @Html.Partial("_AuthorSidebar")
+    <div style="flex:1; min-width:380px; background: #fff; border-radius: 16px; box-shadow: 0 2px 16px rgba(50,80,120,0.11); padding: 46px 64px 38px 64px;">
+        <h2 style="font-weight:700; margin-bottom:14px;">你好，@Model.User.UserName</h2>
+        <div style="font-size:1.2rem;color:#888;margin-bottom:30px;">
+            欢迎来到作家工作台
+        </div>
+        <!-- 可继续添加你的工作台统计、公告等内容 -->
     </div>
-    <div style="margin-bottom:16px;">
-        <strong>简介：</strong> @Model.Bio
-    </div>
-    <a href="@Url.Action("Edit", "Author")" class="btn btn-secondary" style="width:100%;">编辑资料</a>
-    <hr />
-    <div style="margin-bottom:16px;">
-        <a href="@Url.Action("Create", "Novel")" class="btn btn-danger" style="width:100%;">新建小说</a>
-    </div>
-    <h4>我的作品</h4>
-    @if (Model.Novels != null && Model.Novels.Any())
-    {
-        <ul>
-            @foreach (var novel in Model.Novels)
-            {
-                <li>
-                    <strong>@novel.Title</strong>
-                    <a href="@Url.Action("Edit", "Novel", new { id = novel.Id })">编辑</a>
-                    <a href="@Url.Action("Chapters", "Novel", new { id = novel.Id })">章节管理</a>
-                </li>
-            }
-        </ul>
-    }
-    else
-    {
-        <div>你还没有发布作品</div>
-    }
 </div>

@@ -1,0 +1,87 @@
+﻿@model BlogApp.Models.WriteViewModel
+
+<div style="display:flex; height:82vh; margin:36px auto; background:#fff; border-radius:13px; box-shadow:0 4px 36px #f4f7fa;">
+    <!-- 左侧章节导航 -->
+    <div style="width:280px; border-right:1.7px solid #e8ecf0; padding:32px 0 0 0;">
+        <div style="margin-bottom:34px;">
+            <a href="/Chapter/Write?novelId=@Model.Novel.Id&chapterId=0"
+               style="width:80%;background:#20b3fa;color:#fff;font-size:1.05rem;font-weight:700;padding:7px 0;border-radius:8px;border:none;box-shadow:0 1px 6px #eef8fd;display:inline-block;text-align:center;margin-left:10%;">
+                + 新建章节
+            </a>
+        </div>
+        <div style="font-size:1.12rem;font-weight:600;padding-left:28px;margin-bottom:8px;color:#818ea2;">草稿箱</div>
+        <ul style="list-style:none;padding-left:32px;">
+            @if (Model.DraftChapters != null && Model.DraftChapters.Count > 0)
+            {
+                foreach (var c in Model.DraftChapters)
+                {
+                    <li style="margin-bottom:7px;">
+                        <a href="/Chapter/Write?novelId=@Model.Novel.Id&chapterId=@c.Id" style="color:#1e9ad6;text-decoration:none;">@c.Title</a>
+                    </li>
+                }
+            }
+            else
+            {
+                <li style="color:#bbb;font-size:.96em;">暂无草稿</li>
+            }
+        </ul>
+        <div style="font-size:1.12rem;font-weight:600;padding-left:28px;margin-bottom:8px;color:#818ea2;">已发布</div>
+        <ul style="list-style:none;padding-left:32px;">
+            @if (Model.PublishedChapters != null && Model.PublishedChapters.Count > 0)
+            {
+                foreach (var c in Model.PublishedChapters)
+                {
+                    <li style="margin-bottom:7px;">
+                        <a href="/Chapter/Write?novelId=@Model.Novel.Id&chapterId=@c.Id" style="color:#27b565;text-decoration:none;">@c.Title</a>
+                    </li>
+                }
+            }
+            else
+            {
+                <li style="color:#bbb;font-size:.96em;">暂无已发布章节</li>
+            }
+        </ul>
+        <div style="font-size:1.12rem;font-weight:600;padding-left:28px;margin-bottom:8px;color:#f67c27;">回收站</div>
+        <ul style="list-style:none;padding-left:32px;">
+            @if (Model.RecycledChapters != null && Model.RecycledChapters.Count > 0)
+            {
+                foreach (var c in Model.RecycledChapters)
+                {
+                    <li style="margin-bottom:7px;">
+                        <a href="/Chapter/Write?novelId=@Model.Novel.Id&chapterId=@c.Id" style="color:#ff6161;text-decoration:none;">@c.Title</a>
+                    </li>
+                }
+            }
+            else
+            {
+                <li style="color:#bbb;font-size:.96em;">暂无回收章节</li>
+            }
+        </ul>
+    </div>
+    <!-- 右侧正文编辑区 -->
+    <div style="flex:1; padding:38px 54px;">
+        <form id="chapterForm" method="post" action="/Chapter/Save">
+            <input type="hidden" name="Id" value="@(Model.CurrentChapter?.Id ?? 0)" />
+            <input type="hidden" name="NovelId" value="@Model.Novel.Id" />
+            <div style="font-size:1.15rem;font-weight:600;margin-bottom:18px;">
+                当前操作：@(Model.CurrentChapter == null ? "新建章节" : $"编辑章节：{Model.CurrentChapter.Title}")
+            </div>
+            <div style="margin-bottom:22px;">
+                <label style="font-size:1.06rem;">章节标题：</label><br />
+                <input type="text" name="Title" value="@(Model.CurrentChapter?.Title ?? "")" required style="width:80%;font-size:1.11rem;padding:6px 11px;border-radius:6px;border:1.2px solid #c0d2e6;" />
+            </div>
+            <div style="margin-bottom:22px;">
+                <label style="font-size:1.06rem;">章节内容：</label><br />
+                <textarea name="Content" rows="18" required style="width:92%;font-size:1.08rem;padding:8px 11px;border-radius:7px;border:1.2px solid #c0d2e6;">@(Model.CurrentChapter?.Content ?? "")</textarea>
+            </div>
+            <div style="margin-top:24px;">
+                <button type="submit" name="action" value="draft" style="background:#73c4ff;color:#fff;font-size:1.1rem;padding:9px 29px;border-radius:7px;border:none;margin-right:18px;">保存草稿</button>
+                <button type="submit" name="action" value="publish" style="background:#13db90;color:#fff;font-size:1.1rem;padding:9px 29px;border-radius:7px;border:none;margin-right:18px;">发布</button>
+                @if (Model.CurrentChapter != null)
+                {
+                    <button type="submit" name="action" value="delete" style="background:#fd6c63;color:#fff;font-size:1.1rem;padding:9px 29px;border-radius:7px;border:none;">删除</button>
+                }
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+﻿@*
+
+
+@model BlogApp.Models.Chapter
+@{
+    ViewData["Title"] = "编辑章节 - " + Model.Title;
+}
+
+<div style="margin-bottom:24px;">
+    <a href="/Chapter/List?novelId=@Model.NovelId" style="color:#188ddc;font-size:1.09rem;text-decoration:underline;">← 返回章节列表</a>
+</div>
+
+<div style="font-size:1.35rem;font-weight:700;margin-bottom:22px;">
+    编辑章节：@Model.Title
+</div>
+
+<form method="post" action="/Chapter/Edit/@Model.Id">
+    <div style="margin-bottom:22px;">
+        <label style="font-size:1.06rem;">章节标题：</label><br />
+        <input type="text" name="Title" value="@Model.Title" required style="width:80%;font-size:1.11rem;padding:6px 11px;border-radius:6px;border:1.2px solid #c0d2e6;" />
+    </div>
+    <div style="margin-bottom:22px;">
+        <label style="font-size:1.06rem;">章节内容：</label><br />
+        <textarea name="Content" rows="18" required style="width:92%;font-size:1.08rem;padding:8px 11px;border-radius:7px;border:1.2px solid #c0d2e6;">@Model.Content</textarea>
+    </div>
+    <button type="submit" class="btn btn-success" style="font-size:1.1rem;padding:7px 28px;border-radius:8px;">保存修改</button>
+</form>
+
+*@

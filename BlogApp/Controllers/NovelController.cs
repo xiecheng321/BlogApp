@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using BlogApp.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -31,23 +29,16 @@ namespace BlogApp.Controllers
         }
 
 
-        // 问题原因：user 未定义。你需要获取当前登录用户，并通过它找到 AuthorId。
-        // 假设你用 ASP.NET Core Identity 或自定义登录，通常可以通过 User.Identity.Name 拿到用户名，再查 User 和 Author。
-        // 示例修正如下：
-
         [HttpPost]
         public IActionResult Create(string Title, int CategoryId, string Description, IFormFile CoverImage)
         {
-            // 获取当前登录用户
-            var userName = User.Identity?.Name;
-            if (string.IsNullOrEmpty(userName))
-            {
-                return Unauthorized();
-            }
-            var user = _context.Users.Include(u => u.Author).FirstOrDefault(u => u.UserName == userName);
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null) return RedirectToAction("LoginRegister", "Account");
+
+            var user = _context.Users.Include(u => u.Author).FirstOrDefault(u => u.Id == userId);
             if (user == null || user.Author == null)
             {
-                return Forbid(); // 或返回错误提示
+                return RedirectToAction("Apply", "Author"); // 用户不是作者，不能发小说
             }
 
             var novel = new Novel
@@ -57,8 +48,7 @@ namespace BlogApp.Controllers
                 Description = Description,
                 CreateTime = DateTime.Now,
                 Status = NovelStatus.Created,
-                AuthorId = user.Author.Id // 关键：赋值 AuthorId
-                // ... 其它属性
+                AuthorId = user.Author.Id
             };
 
             // ====== 处理封面 ======
@@ -83,11 +73,10 @@ namespace BlogApp.Controllers
                 string fileName = Guid.NewGuid() + ".png";
                 string savePath = Path.Combine(saveDir, fileName);
 
-                BlogApp.Utils.CoverHelper.GenerateCover(novel.Title, savePath);
-
+                BlogApp.Utils.CoverHelper.GenerateCover(novel.Title, "作者：" + user.UserName, savePath);
                 novel.CoverUrl = "/images/covers/" + fileName;
             }
-            // =======================
+
             _context.Novels.Add(novel);
             _context.SaveChanges();
 
@@ -97,100 +86,8 @@ namespace BlogApp.Controllers
 
 
 
+
     }
 
 }
 
-        /*
-        // JSON 数据文件路径（保存所有小说）
-        private static readonly string DataFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "novels.json");
-
-        // 读取小说数据
-        private List<Novel> LoadNovels()
-        {
-            if (!System.IO.File.Exists(DataFile))
-                return new List<Novel>();
-
-            var json = System.IO.File.ReadAllText(DataFile);
-            return JsonSerializer.Deserialize<List<Novel>>(json) ?? new List<Novel>();
-        }
-
-        // 保存小说数据
-        private void SaveNovels(List<Novel> novels)
-        {
-            var json = JsonSerializer.Serialize(novels);
-            System.IO.File.WriteAllText(DataFile, json);
-        }
-
-        // 小说列表页（可选）
-        public IActionResult Index()
-        {
-            var novels = LoadNovels();
-            return View(novels); // 对应 Views/Novel/Index.cshtml
-        }
-
-        // 创建小说页面（GET）
-        public IActionResult Create()
-        {
-            return View(); // 显示表单
-        }
-
-        // 创建小说页面（POST）
-        [HttpPost]
-        public IActionResult Create(Novel novel)
-        {
-            var novels = LoadNovels();
-
-            // 设置 ID：列表最大 ID + 1
-            novel.Id = novels.Any() ? novels.Max(n => n.Id) + 1 : 1;
-            novels.Add(novel);
-
-            SaveNovels(novels);
-
-            // 创建成功后跳转到小说详情页
-            return RedirectToAction("Details", new { id = novel.Id });
-        }
-
-        // 小说详情页（展示简介 + 添加章节按钮）
-        public IActionResult Details(int id)
-        {
-            var novels = LoadNovels();
-            var chapters = LoadChapters();
-
-            var novel = novels.FirstOrDefault(n => n.Id == id);
-            if (novel == null) return NotFound();
-
-            // 手动查找所有属于该小说的章节
-            novel.Chapters = chapters.Where(c => c.NovelId == id).ToList();
-
-            return View(novel); // 对应 Views/Novel/Details.cshtml
-        }
-
-        // 读取章节数据（用于小说详情页中展示该小说的所有章节）
-        private List<Chapter> LoadChapters()
-        {
-            var chapterFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "chapters.json");
-            if (!System.IO.File.Exists(chapterFile))
-                return new List<Chapter>();
-
-            var json = System.IO.File.ReadAllText(chapterFile);
-            return JsonSerializer.Deserialize<List<Chapter>>(json) ?? new List<Chapter>();
-        }
-
-        /*public IActionResult Read(int id) 
-        {
-            var novels = LoadNovels();
-            var novel = novels.FirstOrDefault(n => n.Id == id);
-            if (novel == null) return NotFound();
-
-            //加载章节
-            var chapters = LoadChapters();
-            novel.Chapters = chapters.Where(c => c.NovelId == id).ToList();
-
-            return View(novel); //对应 Views/Novel/Read.cshtml
-        }*/
-/*
-    }
-}
-
-*/

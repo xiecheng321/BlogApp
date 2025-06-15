@@ -10,38 +10,54 @@ namespace BlogApp.Utils
 {
     public class CoverHelper
     {
-        public static void GenerateCover(string title, string savePath, int width = 420, int height = 560)
+        public static void GenerateCover(string title, string subtitle, string savePath, int width = 420, int height = 560)
         {
-            using var image = new Image<Rgba32>(width, height, Color.LightGray);
+            var fontPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/fonts/SourceHanSansCN-Regular.otf");
+            var collection = new FontCollection();
+            var fontFamily = collection.Add(fontPath);
 
-            // 字体
-            Font font;
-            try
-            {
-                var fontFamily = SystemFonts.Families.FirstOrDefault(ff => ff.Name.Contains("黑体") || ff.Name.Contains("SimHei") || ff.Name.Contains("Arial"));
-                if (fontFamily == null)
-                    fontFamily = SystemFonts.Families.First();
-                font = fontFamily.CreateFont(36, FontStyle.Bold);
-            }
-            catch
-            {
-                font = SystemFonts.CreateFont("Arial", 36, FontStyle.Bold);
-            }
+            using var image = new Image<Rgba32>(width, height);
 
-            var richTextOptions = new RichTextOptions(font)
+            // 美化背景：渐变 + 光影
+            image.Mutate(ctx => ctx.Fill(new LinearGradientBrush(
+                new PointF(0, 0), new PointF(width, height),
+                GradientRepetitionMode.None,
+                new ColorStop(0f, Color.WhiteSmoke),
+                new ColorStop(1f, Color.LightGray))
+            ));
+
+            // 字体设置
+            int titleFontSize = title.Length > 15 ? 40 : 52;
+            var titleFont = fontFamily.CreateFont(titleFontSize, FontStyle.Bold);
+            var subtitleFont = fontFamily.CreateFont(20, FontStyle.Italic);
+
+            var titleOptions = new RichTextOptions(titleFont)
             {
                 HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                Origin = new PointF(width / 2f, height / 2f)
+                VerticalAlignment = VerticalAlignment.Top,
+                Origin = new PointF(width / 2f, height * 0.3f)
             };
 
-            var textColor = Color.DarkSlateBlue;
+            var subtitleOptions = new RichTextOptions(subtitleFont)
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                Origin = new PointF(width / 2f, height * 0.85f)
+            };
 
+            // 渲染文字
             image.Mutate(ctx =>
-                ctx.DrawText(richTextOptions, title, textColor)
-            );
+            {
+                ctx.DrawText(titleOptions, title, Color.MediumSlateBlue);
+                if (!string.IsNullOrWhiteSpace(subtitle))
+                {
+                    ctx.DrawText(subtitleOptions, subtitle, Color.DimGray);
+                }
+            });
 
             image.Save(savePath);
         }
+
+
     }
 }

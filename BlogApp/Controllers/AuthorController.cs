@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-
 public class AuthorController : Controller
 {
     private readonly AppDbContext _context;
@@ -14,25 +13,33 @@ public class AuthorController : Controller
         _httpContextAccessor = httpContextAccessor;
     }
 
-    // 显示作家专区首页
-    public IActionResult Index()
+    // ========= 主入口页 =========
+    public IActionResult Home()
     {
         int? userId = HttpContext.Session.GetInt32("UserId");
-        if (userId == null) return RedirectToAction("LoginRegister", "Account");
+        if (userId == null)
+            return RedirectToAction("LoginRegister", "Account");
 
-        var user = _context.Users.Include(u => u.Author).FirstOrDefault(u => u.Id == userId);
-        if (user == null) return RedirectToAction("LoginRegister", "Account");
+        var user = _context.Users
+            .Include(u => u.Author)
+                .ThenInclude(a => a.Novels)
+            .FirstOrDefault(u => u.Id == userId);
 
+        if (user == null)
+            return RedirectToAction("LoginRegister", "Account");
         if (user.Author == null)
-        {
-            // 还不是作家，跳转到申请页
             return RedirectToAction("Apply");
-        }
-        // 已是作家，显示作家中心
-        return RedirectToAction("Me");
+
+        return View(user.Author); // Home.cshtml
     }
 
-    // 申请成为作者
+    // ========= 默认页跳主入口 =========
+    public IActionResult Index()
+    {
+        return RedirectToAction("Home");
+    }
+
+    // ========= 申请成为作者 =========
     [HttpGet]
     public IActionResult Apply()
     {
@@ -40,33 +47,30 @@ public class AuthorController : Controller
     }
 
     [HttpPost]
-    public IActionResult Apply(string penName, string intro)
+    [ValidateAntiForgeryToken]
+    public IActionResult Apply(object? notUsed = null)
     {
         int? userId = HttpContext.Session.GetInt32("UserId");
-        if (userId == null) return RedirectToAction("LoginRegister", "Account");
+        if (userId == null)
+            return RedirectToAction("LoginRegister", "Account");
 
         var user = _context.Users.Include(u => u.Author).FirstOrDefault(u => u.Id == userId);
-        if (user == null) return RedirectToAction("LoginRegister", "Account");
+        if (user == null)
+            return RedirectToAction("LoginRegister", "Account");
 
         if (user.Author != null)
-        {
-            // 已是作者
             return RedirectToAction("Me");
-        }
+
         var author = new Author
         {
-            PenName = penName,
-            Bio = intro,
-            UserId = user.Id,           // ★ 关键行
+            UserId = user.Id,
             ApplyTime = DateTime.Now,
-            Status = 0                  // 有的话加上
-            // 可以添加其他字段如：申请时间
+            Status = 0 // 0待审核，1已通过
         };
 
         _context.Authors.Add(author);
         _context.SaveChanges();
 
-        // 关联
         user.AuthorId = author.Id;
         user.Author = author;
         _context.SaveChanges();
@@ -74,14 +78,42 @@ public class AuthorController : Controller
         return RedirectToAction("Me");
     }
 
-    // 显示作家中心
+    // ========= 工作台/后台 =========
     public IActionResult Me()
     {
         int? userId = HttpContext.Session.GetInt32("UserId");
-        if (userId == null) return RedirectToAction("LoginRegister", "Account");
+        if (userId == null)
+            return RedirectToAction("LoginRegister", "Account");
 
-        var user = _context.Users.Include(u => u.Author).FirstOrDefault(u => u.Id == userId);
-        if (user == null || user.Author == null) return RedirectToAction("Apply");
-        return View(user.Author);
+        var user = _context.Users
+            .Include(u => u.Author)
+                .ThenInclude(a => a.Novels)
+            .FirstOrDefault(u => u.Id == userId);
+
+        if (user == null || user.Author == null)
+            return RedirectToAction("Apply");
+
+        return View(user.Author); // Me.cshtml
     }
+
+    // ========= 作品管理 =========
+    public IActionResult Works()
+    {
+        int? userId = HttpContext.Session.GetInt32("UserId");
+        if (userId == null)
+            return RedirectToAction("LoginRegister", "Account");
+
+        var user = _context.Users
+            .Include(u => u.Author)
+                .ThenInclude(a => a.Novels)
+            .FirstOrDefault(u => u.Id == userId);
+
+        if (user?.Author == null)
+            return RedirectToAction("Apply");
+
+        return View(user.Author); // Works.cshtml
+    }
+
+    // ========= 不再负责写作/章节页面 =========
+    // 所有写作入口全部指向 ChapterController 的 Write
 }

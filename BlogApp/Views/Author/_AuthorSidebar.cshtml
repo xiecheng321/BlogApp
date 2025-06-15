@@ -1,0 +1,42 @@
+﻿@{
+    var current = ViewBag.Current as string ?? "";
+}
+<div style="width: 190px; background: #fff; border-radius: 16px; box-shadow: 0 2px 16px rgba(50,80,120,0.10); padding: 28px 0 28px 0; margin-right: 38px;">
+    <ul style="list-style:none; padding:0; margin:0;">
+        <li style="margin-bottom:16px;">
+            <a href="/Author/Me" class="menu-link @(current=="Me"?"active":"")" style="display:block;padding:10px 28px;font-size:1.08rem;color:@(current=="Me"?"#2463ff":"#444");text-decoration:none;font-weight:600;border-left:4px solid @(current=="Me"?"#2463ff":"transparent"); background:@(current=="Me"?"#f7faff":"#fff"); border-radius:0 20px 20px 0;">
+                工作台
+            </a>
+        </li>
+        <li style="margin-bottom:16px;">
+            <a href="/Author/Works" class="menu-link @(current=="Works"?"active":"")" style="display:block;padding:10px 28px;font-size:1.08rem;color:@(current=="Works"?"#2463ff":"#444");text-decoration:none;font-weight:600;border-left:4px solid @(current=="Works"?"#2463ff":"transparent"); background:@(current=="Works"?"#f7faff":"#fff"); border-radius:0 20px 20px 0;">
+                作品管理
+            </a>
+        </li>
+        <li style="margin-bottom:16px;">
+            <a href="#" class="menu-link" style="display:block;padding:10px 28px;font-size:1.08rem;color:#444;text-decoration:none;font-weight:600;border-left:4px solid transparent;">
+                数据中心
+            </a>
+        </li>
+        <li style="margin-bottom:16px;">
+            <a href="#" class="menu-link" style="display:block;padding:10px 28px;font-size:1.08rem;color:#444;text-decoration:none;font-weight:600;border-left:4px solid transparent;">
+                稿酬收入
+            </a>
+        </li>
+        <li style="margin-bottom:16px;">
+            <a href="#" class="menu-link" style="display:block;padding:10px 28px;font-size:1.08rem;color:#444;text-decoration:none;font-weight:600;border-left:4px solid transparent;">
+                互动管理
+            </a>
+        </li>
+        <li style="margin-bottom:16px;">
+            <a href="#" class="menu-link" style="display:block;padding:10px 28px;font-size:1.08rem;color:#444;text-decoration:none;font-weight:600;border-left:4px solid transparent;">
+                兑换商城
+            </a>
+        </li>
+        <li style="margin-bottom:16px;">
+            <a href="#" class="menu-link" style="display:block;padding:10px 28px;font-size:1.08rem;color:#444;text-decoration:none;font-weight:600;border-left:4px solid transparent;">
+                消息通知
+            </a>
+        </li>
+    </ul>
+</div>
