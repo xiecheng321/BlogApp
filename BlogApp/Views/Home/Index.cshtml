@@ -1,19 +1,57 @@
-﻿
-@{
-    ViewData["Title"] = "Home Page";
+﻿@{
+    ViewData["Title"] = "首页";
+    var categories = ViewBag.Categories as List<BlogApp.Models.Category>;
 }
 
+<div class="container py-4">
 
+    <!-- 顶部 Banner 推荐图 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-dark text-white">
+                <img src="/images/banner.jpg" class="card-img" alt="推荐图" style="height: 300px; object-fit: cover;">
+                <div class="card-img-overlay d-flex flex-column justify-content-end">
+                    <h2 class="card-title">本周推荐：《星界旅者》</h2>
+                    <p class="card-text">穿越异世界，拯救星空文明的史诗巨作。</p>
+                    <a href="#" class="btn btn-primary">立即阅读</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-@*
-@model List<BlogApp.Models.Novel>
+    <!-- 分类快捷入口 -->
+    <div class="row text-center mb-4">
+        @foreach (var cat in categories)
+        {
+            <div class="col-6 col-md-2 mb-3">
+                <a href="#" class="text-decoration-none">
+                    <div class="border rounded p-3 h-100 bg-light">
+                        <div style="font-size: 24px;">📚</div>
+                        <div>@cat.Name</div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
 
-<partial name="_PersonalRecommendSection" />
-<partial name="_EditorRecommendSection" />
-<partial name="_GodRecommendSection" />
-*@
+    <!-- 热门推荐区块 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3 border-bottom pb-2">🔥 热门连载</h4>
+        </div>
+        @for (int i = 0; i < 6; i++)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="/images/covers/sample.jpg" class="card-img-top" alt="封面图">
+                    <div class="card-body">
+                        <h5 class="card-title">武道乾坤 @i</h5>
+                        <p class="card-text text-truncate">少年林云，身怀神秘武魂，誓要踏碎星河，逆天改命。</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">开始阅读</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 
-<div style="text-align:center; margin-top:80px;">
-    <h2>欢迎来到中文网！</h2>
-    <p>（你可以在这里展示任何内容，先确保能访问首页）</p>
 </div>

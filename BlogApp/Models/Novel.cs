@@ -18,6 +18,7 @@ namespace BlogApp.Models
         public string Description { get; set; }
         public string CoverUrl { get; set; }
         public double Score { get; set; }
+        public List<Volume> Volumes { get; set; }   // 新增：分卷集合
         public List<Chapter> Chapters { get; set; }
 
 

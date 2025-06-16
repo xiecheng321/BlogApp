@@ -93,9 +93,17 @@ namespace BlogApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VolumeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NovelId");
+
+                    b.HasIndex("VolumeId");
 
                     b.ToTable("Chapters");
                 });
@@ -188,6 +196,28 @@ namespace BlogApp.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("BlogApp.Models.Volume", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("NovelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NovelId");
+
+                    b.ToTable("Volumes");
+                });
+
             modelBuilder.Entity("BlogApp.Models.Author", b =>
                 {
                     b.HasOne("BlogApp.Models.User", "User")
@@ -207,7 +237,15 @@ namespace BlogApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BlogApp.Models.Volume", "Volume")
+                        .WithMany("Chapters")
+                        .HasForeignKey("VolumeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Novel");
+
+                    b.Navigation("Volume");
                 });
 
             modelBuilder.Entity("BlogApp.Models.Novel", b =>
@@ -229,6 +267,17 @@ namespace BlogApp.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("BlogApp.Models.Volume", b =>
+                {
+                    b.HasOne("BlogApp.Models.Novel", "Novel")
+                        .WithMany("Volumes")
+                        .HasForeignKey("NovelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Novel");
+                });
+
             modelBuilder.Entity("BlogApp.Models.Author", b =>
                 {
                     b.Navigation("Novels");
@@ -242,11 +291,18 @@ namespace BlogApp.Migrations
             modelBuilder.Entity("BlogApp.Models.Novel", b =>
                 {
                     b.Navigation("Chapters");
+
+                    b.Navigation("Volumes");
                 });
 
             modelBuilder.Entity("BlogApp.Models.User", b =>
                 {
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("BlogApp.Models.Volume", b =>
+                {
+                    b.Navigation("Chapters");
                 });
 #pragma warning restore 612, 618
         }

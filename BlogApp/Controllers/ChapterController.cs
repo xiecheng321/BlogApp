@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BlogApp.Models;
+using BlogApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 

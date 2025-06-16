@@ -1,4 +1,8 @@
-﻿@model BlogApp.Models.Author
+﻿@{
+    Layout = "_AuthorLayout";
+}
+
+@model BlogApp.Models.Author
 @{
     ViewBag.Current = "Works";
 }
@@ -42,7 +46,7 @@
                             </div>
                             <div style="margin-top:8px;">
                                 <a href="/Chapter/List?novelId=@novel.Id" style="display:inline-block;padding:5px 23px;margin-right:13px;border-radius:7px;background:#e2f3ff;color:#197fd6;font-size:.98rem;font-weight:600;text-decoration:none;transition:.16s;border:none;">章节管理</a>
-                                <a asp-controller="Author" asp-action="Write" asp-route-novelId="@novel.Id"
+                                <a asp-controller="Chapter" asp-action="Write" asp-route-novelId="@novel.Id"
                                    style="display:inline-block;padding:5px 23px;border-radius:7px;background:#c2ffea;color:#13b47c;font-size:.98rem;font-weight:600;text-decoration:none;transition:.16s;border:none;">
                                     去写作
                                 </a>

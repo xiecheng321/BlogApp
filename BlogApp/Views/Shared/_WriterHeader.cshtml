@@ -1,0 +1,40 @@
+﻿<div id="writer-header">
+    <div class="left">@ViewBag.NovelTitle</div>
+    <div class="right">
+        <button id="btnSaveDraft" class="qh-btn">保存草稿</button>
+        <button id="btnPublish" class="qh-btn qh-btn-blue">发布</button>
+    </div>
+</div>
+<style>
+    #writer-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1010;
+        width: 100vw;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #fff;
+        border-bottom: 1px solid #ececec;
+        padding: 0 48px;
+        box-shadow: 0 1px 10px #f7fafd09;
+    }
+
+        #writer-header .qh-btn {
+            min-width: 90px;
+            margin-left: 20px;
+            border-radius: 6px;
+            border: none;
+            padding: 8px 0;
+            font-weight: 600;
+            color: #2775f9;
+            background: #f6f8fb;
+        }
+
+        #writer-header .qh-btn-blue {
+            background: #2775f9;
+            color: #fff;
+        }
+</style>

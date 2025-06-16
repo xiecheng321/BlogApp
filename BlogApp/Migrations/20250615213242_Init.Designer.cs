@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250613172557_AddAuthorFields")]
-    partial class AddAuthorFields
+    [Migration("20250615213242_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace BlogApp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Author", b =>
+            modelBuilder.Entity("BlogApp.Models.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,14 +35,6 @@ namespace BlogApp.Migrations
 
                     b.Property<DateTime>("ApplyTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Bio")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PenName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -58,6 +50,27 @@ namespace BlogApp.Migrations
                     b.ToTable("Authors");
                 });
 
+            modelBuilder.Entity("BlogApp.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("BlogApp.Models.Chapter", b =>
                 {
                     b.Property<int>("Id")
@@ -70,16 +83,30 @@ namespace BlogApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("NovelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VolumeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NovelId");
+
+                    b.HasIndex("VolumeId");
 
                     b.ToTable("Chapters");
                 });
@@ -95,9 +122,15 @@ namespace BlogApp.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CoverUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -106,13 +139,24 @@ namespace BlogApp.Migrations
                     b.Property<double>("Score")
                         .HasColumnType("float");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("WordCount")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Novels");
                 });
@@ -126,6 +170,9 @@ namespace BlogApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AuthorId")
                         .HasColumnType("int");
 
                     b.Property<string>("AvatarUrl")
@@ -152,11 +199,33 @@ namespace BlogApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Author", b =>
+            modelBuilder.Entity("BlogApp.Models.Volume", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("NovelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NovelId");
+
+                    b.ToTable("Volumes");
+                });
+
+            modelBuilder.Entity("BlogApp.Models.Author", b =>
                 {
                     b.HasOne("BlogApp.Models.User", "User")
                         .WithOne("Author")
-                        .HasForeignKey("Author", "UserId")
+                        .HasForeignKey("BlogApp.Models.Author", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -171,28 +240,72 @@ namespace BlogApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BlogApp.Models.Volume", "Volume")
+                        .WithMany("Chapters")
+                        .HasForeignKey("VolumeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Novel");
+
+                    b.Navigation("Volume");
                 });
 
             modelBuilder.Entity("BlogApp.Models.Novel", b =>
                 {
-                    b.HasOne("Author", "Author")
-                        .WithMany()
+                    b.HasOne("BlogApp.Models.Author", "Author")
+                        .WithMany("Novels")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BlogApp.Models.Category", "Category")
+                        .WithMany("Novels")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Author");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("BlogApp.Models.Volume", b =>
+                {
+                    b.HasOne("BlogApp.Models.Novel", "Novel")
+                        .WithMany("Volumes")
+                        .HasForeignKey("NovelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Novel");
+                });
+
+            modelBuilder.Entity("BlogApp.Models.Author", b =>
+                {
+                    b.Navigation("Novels");
+                });
+
+            modelBuilder.Entity("BlogApp.Models.Category", b =>
+                {
+                    b.Navigation("Novels");
                 });
 
             modelBuilder.Entity("BlogApp.Models.Novel", b =>
                 {
                     b.Navigation("Chapters");
+
+                    b.Navigation("Volumes");
                 });
 
             modelBuilder.Entity("BlogApp.Models.User", b =>
                 {
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("BlogApp.Models.Volume", b =>
+                {
+                    b.Navigation("Chapters");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,39 @@
+﻿<div id="writer-sidebar">
+    <button class="qh-sidebar-new">+ 新建章节</button>
+    <div class="qh-sidebar-tree">
+        <div>草稿箱</div>
+        <div>已发布</div>
+        <div>回收站</div>
+    </div>
+</div>
+<style>
+    #writer-sidebar {
+        position: fixed;
+        top: 58px;
+        left: 0;
+        z-index: 100;
+        width: 220px;
+        height: calc(100vh - 58px);
+        background: #f7f9fa;
+        border-right: 1px solid #e4e8f1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 32px;
+    }
+
+    .qh-sidebar-new {
+        width: 90%;
+        margin-bottom: 28px;
+        background: linear-gradient(90deg, #49aaff 0%, #17c3e6 100%);
+        color: #fff;
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 12px 0;
+        border: none;
+    }
+
+    .qh-sidebar-tree {
+        width: 100%;
+    }
+</style>
