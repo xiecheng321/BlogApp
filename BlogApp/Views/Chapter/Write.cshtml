@@ -1,99 +1,51 @@
 ﻿@{
-    Layout = null;
-    ViewBag.NovelTitle = Model.Novel.Title;
+    Layout = "_AuthorLayout";  // ✅ 使用作家专区专属 layout
 }
-@model BlogApp.ViewModels.WriteViewModel
 
-@await Html.PartialAsync("_WriterHeader")
-@await Html.PartialAsync("_WriterSidebar", Model)
+@model BlogApp.Models.Novel
+@{
+    ViewData["Title"] = "新建作品";
+    var categories = ViewBag.Categories as List<BlogApp.Models.Category>;
+}
 
-<div id="writer-main">
-    <form id="chapterForm" method="post" asp-action="Save" asp-controller="Chapter" autocomplete="off">
-        <input type="text" name="Title" class="qh-title" maxlength="32"
-               value="@Model.CurrentChapter?.Title" placeholder="请输入章节标题，最多32字" required />
-        <textarea name="Content" class="qh-content" required
-                  placeholder="在此输入正文内容...">@Model.CurrentChapter?.Content</textarea>
-        <div class="qh-footer">字数统计：<span id="charCount">@((Model.CurrentChapter?.Content?.Length) ?? 0)</span> 字</div>
+<div class="container mt-5" style="max-width: 700px;">
+    <h2 class="mb-4">新建作品</h2>
+
+    <form asp-action="Create" asp-controller="Novel" method="post">
+        <!-- 校验错误显示，务必放最顶部！ -->
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">作品名称</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">分类</label>
+            <select asp-for="CategoryId" class="form-select">
+                <option value="">请选择分类</option>
+                @foreach (var c in categories!)
+                {
+                    <option value="@c.Id">@c.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">简介</label>
+            <textarea asp-for="Description" rows="4" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">创建作品</button>
+        <a href="/Author/Works" class="btn btn-secondary ms-2">取消</a>
     </form>
 </div>
 
-<style>
-    body, html {
-        margin: 0;
-        padding: 0;
-        background: #f6f8fb;
-        width: 100vw;
-        height: 100vh;
-        overflow-x: hidden;
-    }
-
-    #writer-main {
-        position: absolute;
-        left: 220px;
-        top: 58px;
-        width: calc(100vw - 220px);
-        min-height: calc(100vh - 58px);
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        background: #f6f8fb;
-    }
-
-    #chapterForm {
-        margin: 36px auto 0 auto;
-        width: 820px;
-        min-height: 720px;
-        background: #fff;
-        border-radius: 13px;
-        box-shadow: 0 6px 24px #e6eefa;
-        padding: 38px 36px 24px 36px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .qh-title {
-        width: 100%;
-        font-size: 1.13rem;
-        padding: 12px 15px;
-        border: 1px solid #e2e8f0;
-        border-radius: 7px;
-        background: #fafdff;
-        margin-bottom: 18px;
-    }
-
-    .qh-content {
-        width: 100%;
-        min-height: 440px;
-        max-height: 56vh;
-        resize: vertical;
-        font-size: 1.16rem;
-        padding: 22px 16px;
-        line-height: 2.1;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 10px;
-        background: #fafcff;
-    }
-
-    .qh-footer {
-        color: #8b98a7;
-        font-size: 1rem;
-        text-align: right;
-        margin: 8px 2px 0 0;
-    }
-</style>
-
 @section Scripts {
-    <script>
-        // 按钮事件
-        document.getElementById('btnSaveDraft').onclick = function() {
-            document.getElementById('chapterForm').submit();
-        };
-        document.getElementById('btnPublish').onclick = function() {
-            document.getElementById('chapterForm').submit();
-        };
-        // 实时字数统计
-        document.querySelector('.qh-content').addEventListener('input', function () {
-            document.getElementById('charCount').innerText = this.value.length;
-        });
-    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -1,21 +1,33 @@
-﻿using System;
+﻿// ✅ Chapter.cs - 数据模型
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlogApp.Models
 {
+    public enum ChapterStatus
+    {
+        Draft,
+        Published
+    }
+
     public class Chapter
     {
         public int Id { get; set; }
-        public int NovelId { get; set; }         // 外键
-        public Novel Novel { get; set; }         // 导航属性
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public int Status { get; set; } // 0=草稿，1=已发布，2=回收站
-        public int VolumeId { get; set; }    // 外键，属于哪一卷
-        public Volume Volume { get; set; }
-        public DateTime? UpdateTime { get; set; }
-        public DateTime CreateTime { get; set; }
+
+        [Required]
+        public int NovelId { get; set; }
+        public Novel Novel { get; set; } = null!;
+
+        [Required]
+        public string Title { get; set; } = "";
+
+        [Required]
+        public string Content { get; set; } = "";
+
+        public string? AuthorNote { get; set; }
+        public DateTime CreateTime { get; set; } = DateTime.Now;
+        public DateTime? LastEditTime { get; set; }
+        public ChapterStatus Status { get; set; } = ChapterStatus.Draft;
+        public int WordCount => string.IsNullOrWhiteSpace(Content) ? 0 : Content.Length;
     }
-
-
 }
-

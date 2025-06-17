@@ -20,13 +20,21 @@ namespace BlogApp
             builder.Services.AddSession();
             builder.Services.AddHttpContextAccessor();
 
-            // 3. 构建应用
+            // 3. 注册Cookie认证 【新增部分】
+            builder.Services.AddAuthentication("Cookies")
+                .AddCookie("Cookies", options =>
+                {
+                    options.LoginPath = "/Account/LoginRegister";
+                    options.LogoutPath = "/Account/Logout";
+                });
+
+            // 4. 构建应用
             var app = builder.Build();
 
-            // 4. 注册 Session 中间件
+            // 5. 注册 Session 中间件
             app.UseSession();
 
-            // 5. 配置 HTTP 请求管道
+            // 6. 配置 HTTP 请求管道
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -36,42 +44,36 @@ namespace BlogApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
+            // 7. 注册Cookie认证中间件 【新增部分】
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapRazorPages();
 
-            // 6. 配置默认路由
+            // 8. 配置默认路由
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
-
-            // 分类数据初始化（只会加一次，重复启动不会重复加）
+            // 分类数据初始化...
             using (var scope = app.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<BlogApp.Models.AppDbContext>();
                 if (!context.Categories.Any())
                 {
-
-                        //如果 Category 有 Icon 字段，也可以同时赋值：
-                        //new Category { Name = "玄幻", Icon = "???" }
                     context.Categories.AddRange(
-                        new Category { Name = "玄幻", Icon = "???" },
-                        new Category { Name = "都市", Icon = "???" },
-                        new Category { Name = "科幻", Icon = "??" },
-                        new Category { Name = "悬疑", Icon = "??" },
-                        new Category { Name = "历史", Icon = "??" },
-                        new Category { Name = "现实", Icon = "???" },
-                        new Category { Name = "诗文", Icon = "??" }
-                        // ...可以继续加
+                        new Category { Name = "玄幻" },
+                        new Category { Name = "都市" },
+                        new Category { Name = "科幻" },
+                        new Category { Name = "悬疑" },
+                        new Category { Name = "历史" },
+                        new Category { Name = "现实" },
+                        new Category { Name = "诗文" }
                     );
                     context.SaveChanges();
                 }
             }
-
-
-
 
             app.Run();
         }

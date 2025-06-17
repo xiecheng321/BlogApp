@@ -1,5 +1,8 @@
 ﻿using BlogApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace BlogApp.Controllers
 {
@@ -34,7 +37,7 @@ namespace BlogApp.Controllers
 
         // 登录注册 POST
         [HttpPost]
-        public IActionResult LoginRegister(string phoneNumber, string verifyCode)
+        public async Task<IActionResult> LoginRegister(string phoneNumber, string verifyCode)
         {
             var code = _httpContextAccessor.HttpContext.Session.GetString("VerifyCode_" + phoneNumber);
             var codeTimeStr = _httpContextAccessor.HttpContext.Session.GetString("CodeTime_" + phoneNumber);
@@ -65,19 +68,32 @@ namespace BlogApp.Controllers
                 _context.SaveChanges();
             }
 
-            // 登录信息写入Session
+            // 写Session（可选，过渡期保留）
             _httpContextAccessor.HttpContext.Session.SetInt32("UserId", user.Id);
             _httpContextAccessor.HttpContext.Session.SetString("PhoneNumber", user.PhoneNumber);
             _httpContextAccessor.HttpContext.Session.SetString("UserName", user.UserName ?? "");
+
+            // 写Cookie认证（用 "Cookies" 字符串，确保和Program.cs注册完全一致）
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName ?? user.PhoneNumber),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
+            var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+            await HttpContext.SignInAsync(
+                "Cookies",
+                new ClaimsPrincipal(claimsIdentity)
+            );
 
             // 登录成功后进入信息展示页
             return RedirectToAction("Profile");
         }
 
         // 注销
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             _httpContextAccessor.HttpContext.Session.Remove("UserId");
+            await HttpContext.SignOutAsync("Cookies");
             return RedirectToAction("Index", "Home");
         }
 

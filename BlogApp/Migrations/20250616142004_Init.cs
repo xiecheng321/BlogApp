@@ -72,15 +72,15 @@ namespace BlogApp.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CoverUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Score = table.Column<double>(type: "float", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CoverUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    WordCount = table.Column<int>(type: "int", nullable: false),
+                    LatestChapter = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    FavoritesCount = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -101,26 +101,6 @@ namespace BlogApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Volumes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NovelId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Volumes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Volumes_Novels_NovelId",
-                        column: x => x.NovelId,
-                        principalTable: "Novels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Chapters",
                 columns: table => new
                 {
@@ -129,10 +109,10 @@ namespace BlogApp.Migrations
                     NovelId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    VolumeId = table.Column<int>(type: "int", nullable: false),
-                    UpdateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    AuthorNote = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastEditTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,12 +123,6 @@ namespace BlogApp.Migrations
                         principalTable: "Novels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Chapters_Volumes_VolumeId",
-                        column: x => x.VolumeId,
-                        principalTable: "Volumes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -163,11 +137,6 @@ namespace BlogApp.Migrations
                 column: "NovelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chapters_VolumeId",
-                table: "Chapters",
-                column: "VolumeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Novels_AuthorId",
                 table: "Novels",
                 column: "AuthorId");
@@ -176,11 +145,6 @@ namespace BlogApp.Migrations
                 name: "IX_Novels_CategoryId",
                 table: "Novels",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Volumes_NovelId",
-                table: "Volumes",
-                column: "NovelId");
         }
 
         /// <inheritdoc />
@@ -188,9 +152,6 @@ namespace BlogApp.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Chapters");
-
-            migrationBuilder.DropTable(
-                name: "Volumes");
 
             migrationBuilder.DropTable(
                 name: "Novels");

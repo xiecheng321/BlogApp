@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250615213242_Init")]
-    partial class Init
+    [Migration("20250616165737_UpdateNovelModel")]
+    partial class UpdateNovelModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,11 +79,17 @@ namespace BlogApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AuthorNote")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastEditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("NovelId")
@@ -96,17 +102,9 @@ namespace BlogApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("VolumeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NovelId");
-
-                    b.HasIndex("VolumeId");
 
                     b.ToTable("Chapters");
                 });
@@ -125,19 +123,20 @@ namespace BlogApp.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CoverUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Score")
-                        .HasColumnType("float");
+                    b.Property<int>("FavoritesCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LatestChapter")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -145,12 +144,6 @@ namespace BlogApp.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("WordCount")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -199,28 +192,6 @@ namespace BlogApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BlogApp.Models.Volume", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("NovelId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NovelId");
-
-                    b.ToTable("Volumes");
-                });
-
             modelBuilder.Entity("BlogApp.Models.Author", b =>
                 {
                     b.HasOne("BlogApp.Models.User", "User")
@@ -240,15 +211,7 @@ namespace BlogApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlogApp.Models.Volume", "Volume")
-                        .WithMany("Chapters")
-                        .HasForeignKey("VolumeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Novel");
-
-                    b.Navigation("Volume");
                 });
 
             modelBuilder.Entity("BlogApp.Models.Novel", b =>
@@ -270,17 +233,6 @@ namespace BlogApp.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("BlogApp.Models.Volume", b =>
-                {
-                    b.HasOne("BlogApp.Models.Novel", "Novel")
-                        .WithMany("Volumes")
-                        .HasForeignKey("NovelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Novel");
-                });
-
             modelBuilder.Entity("BlogApp.Models.Author", b =>
                 {
                     b.Navigation("Novels");
@@ -294,18 +246,11 @@ namespace BlogApp.Migrations
             modelBuilder.Entity("BlogApp.Models.Novel", b =>
                 {
                     b.Navigation("Chapters");
-
-                    b.Navigation("Volumes");
                 });
 
             modelBuilder.Entity("BlogApp.Models.User", b =>
                 {
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("BlogApp.Models.Volume", b =>
-                {
-                    b.Navigation("Chapters");
                 });
 #pragma warning restore 612, 618
         }
